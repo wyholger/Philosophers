@@ -6,11 +6,23 @@
 
 #IncludeRegexTransform: 
 
-/Users/wyholger/Desktop/projects/Philosophers/main.c
+/home/wyholger/Desktop/Progect/21/Philosophers/main.c
+philo.h
+/home/wyholger/Desktop/Progect/21/Philosophers/philo.h
 stdio.h
 -
 unistd.h
 -
 pthread.h
 -
+sys/time.h
+-
+stdlib.h
+-
+
+/home/wyholger/Desktop/Progect/21/Philosophers/philo.h
+pthread.h
+-
+philo.h
+/home/wyholger/Desktop/Progect/21/Philosophers/philo.h
 
