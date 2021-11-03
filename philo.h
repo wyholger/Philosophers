@@ -5,6 +5,10 @@
 #ifndef PHILOSOPHERS_PHILO_H
 #define PHILOSOPHERS_PHILO_H
 # include <pthread.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <sys/time.h>
+# include <unistd.h>
 # include "philo.h"
 struct s_philosopher;
 typedef struct s_data
@@ -15,7 +19,11 @@ typedef struct s_data
 	int						t_sleep;
 	int 					must_eat;
 	pthread_mutex_t			*forks;
+	pthread_mutex_t			*can_eat;
+	pthread_mutex_t			*poel;
+	pthread_mutex_t			*need_eat;
 	pthread_t				*philo;
+	pthread_t				*waiter;
 	struct s_philosopher	*ph;
 	unsigned long int 		t_start;
 	int 					*priority;
@@ -36,5 +44,6 @@ typedef struct s_philosopher
 	pthread_mutex_t		mtx_local_death;
 	pthread_mutex_t		mtx_eat_time;
 }				t_ph;
+
 
 #endif //PHILOSOPHERS_PHILO_H
