@@ -10,6 +10,11 @@
 # include <sys/time.h>
 # include <unistd.h>
 # include "philo.h"
+# define MSG_TAKEN_FORK			"\033[33m has taken a fork\033[0m\n"
+# define MSG_EATING				"\033[32m is eating\033[0m\n"
+# define MSG_SLEEPING			"\033[35m is sleeping\033[0m\n"
+# define MSG_THINKING			"\033[36m is thinking\033[0m\n"
+# define MSG_DIED				"\033[31m died\033[0m\n"
 struct s_philosopher;
 typedef struct s_data
 {
@@ -44,6 +49,5 @@ typedef struct s_philosopher
 	pthread_mutex_t		mtx_local_death;
 	pthread_mutex_t		mtx_eat_time;
 }				t_ph;
-
 
 #endif //PHILOSOPHERS_PHILO_H
