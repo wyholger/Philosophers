@@ -1,0 +1,1 @@
+/usr/bin/cc -g CMakeFiles/Philo_3_bonus.dir/main.c.o -o Philo_3_bonus  -pthread 

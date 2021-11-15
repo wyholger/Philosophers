@@ -1,0 +1,3 @@
+/home/wyholger/Desktop/Progect/21/Philo_3_bonus/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/wyholger/Desktop/Progect/21/Philo_3_bonus/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/wyholger/Desktop/Progect/21/Philo_3_bonus/cmake-build-debug/CMakeFiles/Philo_3_bonus.dir
