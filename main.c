@@ -192,6 +192,15 @@ int write_msg(unsigned long int time, t_ph *ph, char *msg)
 	return (0);
 }
 
+void wait_time(int sleep_time)
+{
+	unsigned long int cour;
+
+	cour = get_time_in_ms();
+	while (get_time_in_ms() < cour + sleep_time)
+		usleep(50);
+}
+
 int	take_forks(t_ph *ph)
 {
 	unsigned long int time;
@@ -221,7 +230,8 @@ int eating(t_ph *ph)
 	unsigned long int	time;
 
 	time = (get_time_in_ms() - ph->data->t_start);
-	pthread_mutex_lock(&ph->mtx_eat_time);
+	if (ph->data->death != 1)
+		pthread_mutex_lock(&ph->mtx_eat_time);
 	if (write_msg(time, ph, MSG_EATING) == 0)
 	{
 		pthread_mutex_unlock(&ph->data->forks[min_fork(ph)]);
@@ -231,11 +241,13 @@ int eating(t_ph *ph)
 	}
 	ph->t_last_eat = get_time_in_ms();
 	pthread_mutex_unlock(&ph->mtx_eat_time);
-	usleep(ph->data->t_eat * 1000);
+	wait_time(ph->data->t_eat);
+//	usleep(ph->data->t_eat * 1000);
 	ph->eat_of_time++;
 	pthread_mutex_unlock(&ph->data->forks[max_fork(ph)]);
-//	usleep(100);
+//	usleep(1000);
 	pthread_mutex_unlock(&ph->data->forks[min_fork(ph)]);
+//	usleep(1000);
 	return (1);
 }
 
@@ -248,7 +260,8 @@ int	sleeping(t_ph *ph)
 		return (0);
 	if (write_msg(time, ph, MSG_SLEEPING) == 0)
 		return (0);
-	usleep(ph->data->t_sleep * 1000);
+	wait_time(ph->data->t_sleep);
+//	usleep(ph->data->t_sleep * 1000);
 	return (1);
 }
 
@@ -264,6 +277,8 @@ int	thinking(t_ph *ph)
 	return (1);
 }
 
+
+
 void *check_death(void *arg)
 {
 	t_ph	*ph;
@@ -274,19 +289,19 @@ void *check_death(void *arg)
 	while (get_time_in_ms() - ph->t_last_eat <= (unsigned long int)ph->data->t_die)
 	{
 		pthread_mutex_unlock(&ph->mtx_eat_time);
-		usleep(100);
+		wait_time(10);
 		pthread_mutex_lock(&ph->mtx_eat_time);
 	}
-	usleep(ph->item * 100);
+//	usleep(ph->item * 100);
 	if (ph->data->death != 1)
 	{
 		if (ph->eat_of_time >= ph->data->must_eat && ph->data->must_eat != -1)
 			return (NULL);
 		if (ph->data->death != 1)
 		{
+			ph->data->death = 1;
 			ph->death = 1;
 			printf("%6ld %d %s", get_time_in_ms() - ph->data->t_start, ph->item + 1, MSG_DIED);
-			ph->data->death = 1;
 		}
 	}
 	ph->data->death = 1;
@@ -301,7 +316,8 @@ void *philo(void *arg)
 	ph = (t_ph*)arg;
 	ph->t_last_eat = ph->data->t_start;
 	pthread_create(&t_death, NULL, check_death, &ph[0]);
-	usleep(1000);
+//	usleep(1000);
+	wait_time(1);
 	while (ph->data->death != 1)
 	{
 		if (ph->data->must_eat != -1 && ph->eat_of_time >= ph->data->must_eat)
@@ -316,7 +332,8 @@ void *philo(void *arg)
 			break ;
 		if (thinking(ph) == 0)
 			break ;
-		usleep(1000);
+		wait_time(1);
+//		usleep(1000);
 	}
 	pthread_join(t_death, NULL);
 	return (NULL);
@@ -361,7 +378,8 @@ void init_philo(t_data *data)
 		else
 			return ;
 	}
-	usleep(1000);
+	wait_time(data->t_eat);
+//	usleep(1000);
 	i = 0;
 	while (i < data->num_phil)
 	{

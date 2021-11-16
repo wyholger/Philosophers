@@ -198,6 +198,15 @@ t_ph *init_philo_sruct(t_data *data, t_ph *ph)
 	return (ph);
 }
 
+void wait_time(int sleep_time)
+{
+	unsigned long int cour;
+
+	cour = get_time_in_ms();
+	while (get_time_in_ms() < cour + sleep_time)
+		usleep(50);
+}
+
 int write_msg(unsigned long int time, t_ph *ph, char *msg, int len_msg)
 {
 	char	*char_time;
@@ -270,11 +279,12 @@ void *check_death(void *arg)
 	while (get_time_in_ms() - ph->t_last_eat <= (unsigned long int)ph->data->t_die && ph->data->death != 1)
 	{
 		sem_post(ph->data->sem_eat_time);
-		usleep(100);
+		wait_time(1);
+//		usleep(100);
 		sem_wait(ph->data->sem_eat_time);
 	}
 	sem_post(ph->data->sem_eat_time);
-	usleep(ph->item * 100);
+//	usleep(ph->item * 100);
 	if (ph->data->death != 1)
 	{
 		if (ph->eat_of_time >= ph->data->must_eat && ph->data->must_eat != -1)
@@ -329,7 +339,8 @@ int eating(t_ph *ph)
 	}
 	ph->t_last_eat = get_time_in_ms();
 	sem_post(ph->data->sem_eat_time);
-	usleep(ph->data->t_eat * 1000);
+	wait_time(ph->data->t_eat);
+//	usleep(ph->data->t_eat * 1000);
 	ph->eat_of_time++;
 	sem_post(ph->data->sem_forks);
 	sem_post(ph->data->sem_forks);
@@ -345,7 +356,8 @@ int	sleeping(t_ph *ph)
 		return (0);
 	if (write_msg(time, ph, MSG_SLEEPING, SIZE_MSG_SLEEPING) == 0)
 		return (0);
-	usleep(ph->data->t_sleep * 1000);
+	wait_time(ph->data->t_sleep);
+//	usleep(ph->data->t_sleep * 1000);
 	return (1);
 }
 
@@ -370,7 +382,7 @@ void *philo(void *arg)
 	ph = (t_ph*)arg;
 	ph->t_last_eat = ph->data->t_start;
 	pthread_create(&t_death, NULL, check_death, &ph[0]);
-	usleep(1000);
+//	usleep(1000);
 	while (ph->data->death != 1)
 	{
 		if (ph->data->must_eat != -1 && ph->eat_of_time >= ph->data->must_eat)
@@ -385,7 +397,8 @@ void *philo(void *arg)
 			break ;
 		if (thinking(ph) == 0)
 			break ;
-		usleep(1000);
+		wait_time(1);
+//		usleep(1000);
 	}
 	pthread_join(t_death, NULL);
 	return (NULL);
@@ -412,7 +425,8 @@ int	init_philo(t_data *data)
 		else
 			return (0);
 	}
-	usleep(1000);
+	wait_time(data->t_eat);
+//	usleep(1000);
 	i = 1;
 	while (i < data->num_phil)
 	{
