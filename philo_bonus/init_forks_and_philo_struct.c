@@ -16,7 +16,6 @@ void	init_null_data(t_data *data)
 {
 	data->death = 0;
 	data->philo = NULL;
-	data->death_flag = 0;
 	sem_disable();
 	data->sem_eat_time = sem_open("eat_time", O_CREAT, 0660, 1);
 	data->sem_write = sem_open("write", O_CREAT, 0660, 1);

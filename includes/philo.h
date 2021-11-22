@@ -6,12 +6,12 @@
 /*   By: wyholger <wyholger@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 21:54:34 by wyholger          #+#    #+#             */
-/*   Updated: 2021/11/18 21:56:20 by wyholger         ###   ########.fr       */
+/*   Updated: 2021/11/22 14:56:13 by wyholger         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILO_H
-#define PHILO_H
+# define PHILO_H
 # include <pthread.h>
 # include <stdio.h>
 # include <stdlib.h>
@@ -26,37 +26,29 @@
 
 struct	s_philosopher;
 struct	s_data;
-typedef struct	s_data
+typedef struct s_data
 {
 	int						num_phil;
 	int						t_die;
 	int						t_eat;
 	int						t_sleep;
-	int 					must_eat;
+	int						must_eat;
 	pthread_mutex_t			*forks;
-	pthread_mutex_t			*can_eat;
-	pthread_mutex_t			*poel;
-	pthread_mutex_t			*need_eat;
 	pthread_t				*philo;
-	pthread_t				*waiter;
 	struct s_philosopher	*ph;
-	unsigned long int 		t_start;
-	int 					*priority;
-	int 					death;
-	int 					death_flag;
+	unsigned long int		t_start;
+	int						death;
+	int						death_flag;
 }				t_data;
 typedef struct s_philosopher
 {
 	int					item;
 	int					l_fork;
-	int 				r_fork;
-	int 				l_phil;
-	int 				r_phil;
-	int 				death;
-	int 				eat_of_time;
+	int					r_fork;
+	int					death;
+	int					eat_of_time;
 	unsigned long int	t_last_eat;
 	t_data				*data;
-	pthread_mutex_t		mtx_local_death;
 	pthread_mutex_t		mtx_eat_time;
 }				t_ph;
 void				parsing(t_data *data, int argc, char *argv[]);
@@ -85,4 +77,4 @@ void				start(t_data *data);
 void				init_philo(t_data *data);
 void				*philo(void *arg);
 void				*check_death(void *arg);
-#endif //PHILO_H
+#endif
